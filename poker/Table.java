@@ -1,5 +1,7 @@
 package per.projects.poker;
+import per.projects.poker.Carta;
 import per.projects.poker.Player;
+import per.projects.poker.Table;
 
 public class Table {
     private String name;

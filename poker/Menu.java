@@ -5,7 +5,8 @@ import java.util.Scanner;
 public class Menu {
     Player[] players = new Player[8];
     Table table = new Table();
-
+    Carta[] cartas = Carta.generateDeck();
+    
     public Menu(){}
     public void mainMenu(){
         Scanner sc = new Scanner(System.in);
@@ -17,9 +18,20 @@ public class Menu {
         try{
             int option = sc.nextInt();
             if(option==1){
+                try{
+                    Game.play(this.players, this.table, this.cartas);
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                    mainMenu();
+                }
             }
             if(option==2){
-                players = createPlayers(createNames(), new int[]{200,200,200,200,200,200,200,200});
+                for(int i = 0; i<players.length;i++){
+                    System.out.print((i+1)+" Ingrese nombre: ");
+                    String name = sc.next();
+                    players[i] = new Player(name, 200);
+                }
                 mainMenu();
             }
             if(option==3){
@@ -60,25 +72,8 @@ public class Menu {
             e.printStackTrace();
         }
     }
-    public String[] createNames(){
-        String[] names = new String[8];
-        try{
-            Scanner sc = new Scanner(System.in);
-            for(int i = 0; i<8;i++){
-                System.out.print("Ingrese nombre "+(i+1)+": ");
-                names[i]=new String(sc.nextLine());
-            }
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-        return names;
-    }
-    public Player[] createPlayers(String[] name, int[] money){
-        Player[] players = new Player[8];
-        for(int i = 0; i<name.length;i++){
-            players[i] = new Player(name[i], money[i]);
-        }
-        return players;
+    public Player createPlayer(String name, int money){
+        Player player = new Player(name, money);
+        return player;
     }
 }
