@@ -36,109 +36,24 @@ public class Game {
         players = share(players, cartasShuffled);
         while(players[0].hasMoney()){
             for(int i = table.getRound();i<=3;i++){
+                if(i==1){ table.setFlop(new Carta[] {cartasShuffled[17], cartasShuffled[18], cartasShuffled[19]});}
+                if(i==2){ table.setTurn(cartasShuffled[20]); }
+                if(i==3){ table.setRiver(cartasShuffled[21]); }
+                table.setActualBet(0);
+                table.setRound(i);
+                if(table.getRound() == 3){
+                    table.setRound(0);
+                }
                 for(Player p : players){
-                    table = playRound(p, table);
+                    table = Menu.playRound(p, table);
                     for(Carta c : p.getCartas()){
                         if(c.getShowed()){
                             c.setShowedOff();
                         }
                     }
                 }
-                table.setActualBet(0);
-                table.setRound(i);
             }
         }
-    }
-    public static Table playRound(Player player, Table table){
-        Scanner sc = new Scanner(System.in);
-        if(table.getActualBet()==0 && player.hasMoney() && player.getFolded()==false){
-            System.out.println(player.getName());
-            System.out.println(player.getMoney());
-            System.out.println(player.getHand());
-            System.out.println("1) Bet");
-            System.out.println("2) Check");
-            System.out.println("3) Toggle cards");
-            switch(table.getRound()){
-                case 0: System.out.println("Pre flop");
-                case 1: System.out.println("Flop");
-                case 2: System.out.println("Turn");
-                case 3: System.out.println("River");
-            }
-            System.out.print("Action --> ");
-            int option = sc.nextInt();
-            if(option==1){
-                System.out.print("Bet quantity --> ");
-                int quantity = sc.nextInt();
-                if(table.getMaxBet()<=0 && quantity<=player.getMoney() && player.getMoney()>0){
-                    player.bet(quantity);
-                    table.setActualBet(quantity);
-                    table.setPot(quantity);
-                }
-                else{
-                    System.out.println("Max bet is "+table.getMaxBet());
-                    playRound(player, table);
-                }
-            }
-            if(option==2){
-                System.out.println("You checked.");
-            }
-            if(option==3){
-                player.toggleCartas();
-                playRound(player, table);
-            }
-        }
-        else if(table.getActualBet()>0 && player.hasMoney() && player.getFolded()==false){
-            System.out.println(player.getName());
-            System.out.println(player.getMoney());
-            System.out.println(player.getHand());
-            System.out.println("1) Bet");
-            System.out.println("2) Call");
-            System.out.println("3) Fold");
-            System.out.println("4) Toggle cards");
-            switch(table.getRound()){
-                case 0: System.out.println("Pre flop");
-                case 1: System.out.println("Flop");
-                case 2: System.out.println("Turn");
-                case 3: System.out.println("River");
-            }
-            System.out.println("Pot: "+table.getPot());
-            System.out.println("Actual bet: "+table.getActualBet());
-            System.out.print("Action --> ");
-            int option = sc.nextInt();
-            if(option==1){
-                System.out.print("Bet quantity --> ");
-                int quantity = sc.nextInt();
-                if(table.getMaxBet()<=0 && quantity<=player.getMoney() && quantity>0 && quantity>=table.getActualBet()){
-                    player.bet(quantity);
-                    table.setActualBet(quantity);
-                    table.setPot(quantity);
-                }
-                else{
-                    System.out.println("Max bet is "+table.getMaxBet());
-                    System.out.println("Actual bet: "+table.getActualBet());
-                    playRound(player, table);
-                }
-            }
-            if(option==2){
-                player.bet(table.getActualBet());
-                table.setActualBet(table.getActualBet());
-                table.setPot(table.getActualBet());
-            }
-            if(option==3){
-                player.setFoldedOn();
-            }
-            if(option==4){
-                player.toggleCartas();
-                playRound(player, table);
-            }
-            Carta [] showedOff = new Carta[2];
-            showedOff = player.getCartas();
-            for(Carta c : showedOff){
-                c.setShowedOff();
-            }
-            player.setCartas(showedOff);
-        }
-        return table;
     }
     public static void main(String[] args){
         Menu menu = new Menu();

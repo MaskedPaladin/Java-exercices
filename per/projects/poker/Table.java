@@ -14,7 +14,7 @@ public class Table {
     private int round = 0;
     private Player[] players = new Player[MAX_PLAYERS];
     private int playersQuantity;
-    private Card[] tableCards = new Card[5];
+    private Carta[] tableCards = new Carta[5];
     public Table(String name, int max_bet, int max_players){
         this.name = name;
         this.MAX_BET = max_bet;
@@ -24,8 +24,28 @@ public class Table {
     public void setStarterMoney(int money){
         this.STARTER_MONEY=money;
     }
-    public void setFlop(){
-        this.
+    public void setFlop(Carta[] cards){
+        this.tableCards[0] = cards[0];
+        this.tableCards[1] = cards[1];
+        this.tableCards[2] = cards[2];
+    }
+    public void setTurn(Carta card){
+        this.tableCards[3] = card;
+    }
+    public void setRiver(Carta card){
+        this.tableCards[4] = card;
+    }
+    public String getTableCards(){
+        String cards = "";
+        for(Carta c : this.tableCards){
+            if(c!=null){
+                cards+="|"+c.getSymbol();
+            }
+            else{
+                cards+="|--";
+            }
+        }
+        return cards;
     }
     public int getRound(){
         return this.round;
